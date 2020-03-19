@@ -60,6 +60,8 @@ static void tick() {
     tim_set_timer(10000, tick);
 }
 
+void screen_stripes(void);
+
 int main(void) {
     jdspi_early_init();
     led_init();
@@ -71,6 +73,12 @@ int main(void) {
     tick();
 
     jdspi_init();
+
+#if 0
+    screen_set_backlight(255);
+    screen_stripes();
+    while(1);
+#endif
 
     uint64_t lastBlink = tim_get_micros();
     while (1) {

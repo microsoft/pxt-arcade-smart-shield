@@ -382,4 +382,35 @@ void screen_send_indexed(const uint32_t *src, uint32_t numwords) {
     send_pixel_data((const uint8_t *)src, numwords << 2, &PORT->BSRR, bsrrMasks);
 }
 
+static const uint32_t palette[] = {
+    0x000000, // 0
+    0xffffff, // 1
+    0xff2121, // 2
+    0xff93c4, // 3
+    0xff8135, // 4
+    0xfff609, // 5
+    0x249ca3, // 6
+    0x78dc52, // 7
+    0x003fad, // 8
+    0x87f2ff, // 9
+    0x8e2ec4, // 10
+    0xa4839f, // 11
+    0x5c406c, // 12
+    0xe5cdc4, // 13
+    0x91463d, // 14
+    0x000000, // 15
+};
+
+void screen_stripes() {
+    static uint32_t line[64 / 4];
+    screen_send_palette(palette);
+    startRAMWR(ILI9341_RAMWR);
+    for (int i = 0; i < 16; ++i) {
+        memset(line, 0x11 * i, sizeof(line));
+        for (int j = 0; j < 10; ++j)
+            screen_send_indexed(line, 64 / 4);
+    }
+    SET_CS(0);
+}
+
 #endif
