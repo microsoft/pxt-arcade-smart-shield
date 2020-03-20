@@ -27,13 +27,24 @@ static const uint8_t buttonPins[] = {
 #endif
 };
 
+#define BUTTON_FLAGS 0
+#define NUM_PLAYERS 1
+
+static uint16_t buttonAd[] = { //
+    BUTTON_FLAGS | (NUM_PLAYERS << 8), JD_ARCADE_CONTROLS_BUTTON_LEFT, JD_ARCADE_CONTROLS_BUTTON_UP,
+    JD_ARCADE_CONTROLS_BUTTON_RIGHT,   JD_ARCADE_CONTROLS_BUTTON_DOWN, JD_ARCADE_CONTROLS_BUTTON_A,
+    JD_ARCADE_CONTROLS_BUTTON_B,       JD_ARCADE_CONTROLS_BUTTON_MENU};
+
 #define NUM_PINS sizeof(buttonPins)
 
-static bool sendReport, inited;
+static bool sendReport, advertise, inited;
 
 void jd_arcade_controls_incoming(jd_packet_t *pkt) {
-    // not expecting anything, but make sure we respond with something
-    sendReport = true;
+    if (pkt->service_command == JD_CMD_ADVERTISEMENT_DATA)
+        advertise = true;
+    else
+        // not expecting anything, but make sure we respond with something
+        sendReport = true;
 }
 
 void jd_arcade_controls_process() {
@@ -47,22 +58,25 @@ void jd_arcade_controls_process() {
         sendReport = true;
 }
 
-void jd_arcade_controls_outgoing(int serviceNo, void *dst) {
+void jd_arcade_controls_outgoing(int serviceNo) {
+    jdspi_send_ad_data(serviceNo, &advertise, buttonAd, sizeof(buttonAd));
+
     if (!sendReport)
         return;
 
-    sendReport = false;
+    jd_arcade_controls_report_entry_t reports[NUM_PINS], *report;
+    report = reports;
 
-    jd_arcade_controls_report_entry_t *report = dst;
     for (int i = 0; i < NUM_PINS; ++i) {
         if (pin_get(buttonPins[i]) == 0) {
             report->button = i;
             report->player_index = 0;
             report->pressure = 0xff;
-            DMESG("btn %d", i);
+            // DMESG("btn %d", i);
             report++;
         }
     }
 
-    jdspi_send(serviceNo, 0, (uint8_t *)report - (uint8_t *)dst);
+    if (jdspi_send(serviceNo, JD_CMD_GET_STATE, 0, reports, (uint8_t *)report - (uint8_t *)reports))
+        sendReport = false;
 }

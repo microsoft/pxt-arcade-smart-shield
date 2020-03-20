@@ -1,7 +1,6 @@
 #include "jdsimple.h"
 #include "jdspi.h"
-
-#include "addata.h"
+#include "jdlow.h"
 
 // timeout before we go to sleep if no host found
 #define INITIAL_TIMEOUT_MS 5000
@@ -15,36 +14,22 @@
 #define PIN_SPIS_MISO PA_6
 
 typedef uint8_t *PByte;
+typedef jd_frame_t *PFrame;
 
-static uint8_t recv0[JDSPI_PKTSIZE], recv1[JDSPI_PKTSIZE];
-static uint8_t send0[JDSPI_PKTSIZE];
-static volatile bool sendBusy;
+#define SEND_FILLING 0
+#define SEND_READY 1
+#define SEND_SENDING 2
+
+static jd_frame_t recv0, recv1, send0;
+static volatile uint8_t sendState;
 static bool abort_req, anyPkts;
-static volatile PByte pendingPkt, pendingPkt2, currPkt;
+static volatile PFrame pendingPkt, pendingPkt2, currPkt;
 static uint64_t lastPktTime;
 static uint32_t disconnectedCycles;
 bool jdspi_is_connected;
 
-static inline bool sendFull() {
-    jd_spi_packet_t *pkt = (jd_spi_packet_t *)send0;
-    return pkt->pkt.service_number != 0xff;
-}
 static void not_ready() {
     pin_set(PIN_FLOW, 0);
-}
-
-static void setupSend(int service, int cmd, int size) {
-    jd_spi_packet_t *pkt = (jd_spi_packet_t *)send0;
-    pkt->magic = JDSPI_MAGIC;
-    pkt->pkt.size = size;
-    pkt->pkt.service_flags = 0;
-    pkt->pkt.service_command = cmd;
-    pkt->pkt.service_number = service;
-}
-
-static void clearSend() {
-    memset(send0, 0, sizeof(send0));
-    setupSend(0xff, 0, 0);
 }
 
 static void setConnected(bool isConn) {
@@ -64,9 +49,9 @@ static void transfer_done() {
     not_ready(); // should be set by HalfTransfer, but just in case
 
     if (currPkt) {
-        if (sendBusy) {
-            clearSend();
-            sendBusy = false;
+        if (sendState == SEND_SENDING) {
+            sendState = SEND_FILLING;
+            memset(&send0, 0, sizeof(send0));
         }
         if (pendingPkt) {
             pendingPkt2 = currPkt;
@@ -76,16 +61,20 @@ static void transfer_done() {
             pendingPkt = currPkt;
         }
     }
-    if (pendingPkt == recv0)
-        currPkt = recv1;
+    if (pendingPkt == &recv0)
+        currPkt = &recv1;
     else
-        currPkt = recv0;
+        currPkt = &recv0;
 
-    if (sendFull())
-        sendBusy = true;
+    if (sendState == SEND_READY) {
+        sendState = SEND_SENDING;
+        send0.crc = JDSPI_MAGIC;
+    } else {
+        send0.crc = JDSPI_MAGIC_NOOP;
+    }
 
     // setup transfer
-    spis_xfer(send0, currPkt, JDSPI_PKTSIZE, transfer_done);
+    spis_xfer(&send0, currPkt, sizeof(send0), transfer_done);
     // announce we're ready
     pin_set(PIN_FLOW, 1);
 }
@@ -112,25 +101,32 @@ static void error_cb() {
     not_ready();
 }
 
-static void send_ad_data(int serviceNo, void *dst) {
-    memcpy(dst, adData, sizeof(adData));
-    jdspi_send(serviceNo, 0, sizeof(adData));
+void *jdspi_send(unsigned service_num, unsigned service_cmd, unsigned service_arg, const void *data,
+                 unsigned size) {
+    void *p = jd_push_in_frame(&send0, service_num, service_cmd, service_arg, size);
+    if (p && data)
+        memcpy(p, data, size);
+    return p;
 }
 
-void jdspi_send(uint32_t service, uint32_t cmd, uint32_t size) {
-    if (size > JDSPI_PKTSIZE - 4)
-        panic();
-    if (service > 0xfe || cmd > 0xff)
-        panic();
-    setupSend(service, cmd, size);
+void jdspi_send_ad_data(unsigned service_num, bool *flag, const void *data, unsigned size) {
+    if (*flag && jdspi_send(service_num, JD_CMD_ADVERTISEMENT_DATA, 0, data, size))
+        *flag = false;
 }
+
+static const uint32_t adData[] = {
+    JD_SERVICE_CLASS_CTRL,            // 0
+    JD_SERVICE_CLASS_DISPLAY,         // 1
+    JD_SERVICE_CLASS_ARCADE_CONTROLS, // 2
+};
 
 static bool advertise;
 
 static void process_one(jd_packet_t *pkt) {
     switch (pkt->service_number) {
     case 0:
-        advertise = true;
+        if (pkt->service_command == JD_CMD_ADVERTISEMENT_DATA)
+            advertise = true;
         break;
     case 1:
         jd_display_incoming(pkt);
@@ -143,33 +139,31 @@ static void process_one(jd_packet_t *pkt) {
     if (jd_display_frame_start)
         advertise = true;
 
-    void *dst = send0 + JDSPI_HEADER_SIZE;
-
-    if (!sendFull() && advertise) {
-        advertise = false;
-        send_ad_data(0, dst);
+    if (sendState == SEND_FILLING) {
+        jdspi_send_ad_data(0, &advertise, adData, sizeof(adData));
+        jd_display_outgoing(1);
+        jd_arcade_controls_outgoing(2);
+        if (send0.size)
+            sendState = SEND_READY;
     }
-
-    if (!sendFull())
-        jd_display_outgoing(1, dst);
-
-    if (!sendFull())
-        jd_arcade_controls_outgoing(2, dst);
 }
 
 static void do_process() {
-    jd_spi_packet_t *pkt = (jd_spi_packet_t *)pendingPkt;
+    jd_frame_t *pkt = pendingPkt;
 
-    if (pkt->magic != JDSPI_MAGIC) {
-        DMESG("magic mismatch: %x", pkt->magic);
+    if (pkt->crc == JDSPI_MAGIC_NOOP)
+        return;
+
+    if (pkt->crc != JDSPI_MAGIC) {
+        DMESG("magic mismatch: %x", pkt->crc);
         abort_req = true;
         return;
     }
+
     // DMESG("PKT sz=%d to:%d", pkt->size, pkt->service_number);
-    while (pkt->magic == JDSPI_MAGIC) {
-        process_one(&pkt->pkt);
-        pkt = (jd_spi_packet_t *)(pkt->data + ((pkt->pkt.size + 3) & ~3));
-        if ((uint8_t *)pkt > pendingPkt + JDSPI_PKTSIZE - 4)
+    for (;;) {
+        process_one((jd_packet_t *)pkt);
+        if (!jd_shift_frame(pkt))
             break;
     }
 }
@@ -244,8 +238,6 @@ void jdspi_early_init() {
 void jdspi_init() {
     spis_halftransfer_cb = not_ready;
     spis_error_cb = error_cb;
-
-    clearSend();
 
     jdspi_early_init(); // just in case
 

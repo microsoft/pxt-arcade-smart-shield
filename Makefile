@@ -13,8 +13,9 @@ CFLAGS = $(DEFINES) \
 	-Os -g3 -Wall -ffunction-sections -fdata-sections \
 	$(WARNFLAGS)
 BUILT = built/$(TARGET)
-JD_HEADER_PATH = pxt-common-packages/libs/screen---st7735
-HEADERS = $(wildcard src/*.h) $(wildcard $(JD_HEADER_PATH)/*.h)
+JD_DISPLAY_HEADER_PATH = pxt-common-packages/libs/screen---st7735
+JD_HEADER_PATH = pxt-common-packages/libs/jacdac
+HEADERS = $(wildcard src/*.h) $(wildcard $(JD_HEADER_PATH)/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h)
 
 include targets/$(TARGET)/config.mk
 
@@ -24,6 +25,7 @@ endif
 
 C_SRC += $(wildcard src/*.c) 
 C_SRC += $(HALSRC)
+C_SRC += $(JD_HEADER_PATH)/jdutil.c
 
 AS_SRC = targets/$(TARGET)/startup.s
 LD_SCRIPT = targets/$(TARGET)/linker.ld
@@ -40,6 +42,7 @@ CPPFLAGS = \
 	-Itargets/$(TARGET) \
 	-Isrc \
 	-I$(JD_HEADER_PATH) \
+	-I$(JD_DISPLAY_HEADER_PATH) \
 	-I$(BUILT)
 
 LDFLAGS = -specs=nosys.specs -specs=nano.specs \
@@ -96,14 +99,6 @@ $(BUILT)/binary.hex: $(BUILT)/binary.elf
 	@echo HEX $<
 	$(PREFIX)objcopy -O ihex $< $@
 	$(PREFIX)size $<
-
-$(BUILT)/src/jdspi.o: $(BUILT)/addata.h
-
-$(BUILT)/addata.h: $(BUILT)/genad
-	./$(BUILT)/genad > "$@"
-
-$(BUILT)/genad: genad/genad.c $(HEADERS)
-	cc -I$(JD_HEADER_PATH) -o "$@" $<
 
 clean:
 	rm -rf built

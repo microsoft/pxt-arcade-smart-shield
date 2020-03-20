@@ -99,3 +99,7 @@ void panic(void) {
         wait_us(100000);
     }
 }
+
+void jd_panic() {
+    panic();
+}
