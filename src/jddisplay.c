@@ -40,7 +40,7 @@ void jd_display_incoming(jd_packet_t *pkt) {
         handleCmdPixels(pktData, pkt->service_size);
         break;
     case JD_DISPLAY_CMD_SET_BRIGHTNESS:
-        handleCmdBrightness(pkt->service_arg);
+        handleCmdBrightness(pkt->data[0]);
         break;
     }
 }

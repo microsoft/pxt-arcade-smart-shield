@@ -58,13 +58,6 @@ void tim_init();
 uint64_t tim_get_micros();
 void tim_set_timer(int delta, cb_t cb);
 
-// uart.c
-void uart_init();
-int uart_start_tx(const void *data, uint32_t numbytes);
-void uart_start_rx(void *data, uint32_t maxbytes);
-void uart_disable();
-void uart_wait_high();
-
 // crc.c
 uint16_t crc16(const void *data, uint32_t size);
 

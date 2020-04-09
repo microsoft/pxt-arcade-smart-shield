@@ -77,6 +77,7 @@ void jd_arcade_controls_outgoing(int serviceNo) {
         }
     }
 
-    if (jdspi_send(serviceNo, JD_CMD_GET_STATE, 0, reports, (uint8_t *)report - (uint8_t *)reports))
+    if (jdspi_send(serviceNo, JD_CMD_GET_REG | JD_REG_READING, reports,
+                   (uint8_t *)report - (uint8_t *)reports))
         sendReport = false;
 }

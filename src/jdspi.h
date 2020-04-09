@@ -9,8 +9,7 @@ void jdspi_early_init();
 void jdspi_init();
 void jdspi_connected();
 void jdspi_disconnected();
-void *jdspi_send(unsigned service_num, unsigned service_cmd, unsigned service_arg, const void *data,
-                 unsigned size);
+void *jdspi_send(unsigned service_num, unsigned service_cmd, const void *data, unsigned size);
 void jdspi_send_ad_data(unsigned service_num, bool *flag, const void *data, unsigned size);
 
 extern bool jd_display_frame_start;

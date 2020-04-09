@@ -63,7 +63,7 @@ ifeq ($(BMP),)
 else
 	echo "load" >> built/debug.gdb
 	echo "quit" >> built/debug.gdb
-	arm-none-eabi-gdb --command=built/debug.gdb
+	arm-none-eabi-gdb --command=built/debug.gdb < /dev/null
 endif
 
 prep-built-gdb:

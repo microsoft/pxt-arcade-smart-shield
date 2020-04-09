@@ -101,16 +101,15 @@ static void error_cb() {
     not_ready();
 }
 
-void *jdspi_send(unsigned service_num, unsigned service_cmd, unsigned service_arg, const void *data,
-                 unsigned size) {
-    void *p = jd_push_in_frame(&send0, service_num, service_cmd, service_arg, size);
+void *jdspi_send(unsigned service_num, unsigned service_cmd, const void *data, unsigned size) {
+    void *p = jd_push_in_frame(&send0, service_num, service_cmd, size);
     if (p && data)
         memcpy(p, data, size);
     return p;
 }
 
 void jdspi_send_ad_data(unsigned service_num, bool *flag, const void *data, unsigned size) {
-    if (*flag && jdspi_send(service_num, JD_CMD_ADVERTISEMENT_DATA, 0, data, size))
+    if (*flag && jdspi_send(service_num, JD_CMD_ADVERTISEMENT_DATA, data, size))
         *flag = false;
 }
 
