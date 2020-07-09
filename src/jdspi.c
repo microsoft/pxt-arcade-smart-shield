@@ -1,6 +1,5 @@
 #include "jdsimple.h"
 #include "jdspi.h"
-#include "jdlow.h"
 
 // timeout before we go to sleep if no host found
 #define INITIAL_TIMEOUT_MS 5000

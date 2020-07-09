@@ -22,8 +22,8 @@
 #define PIN_DISPLAY_RST PA_8
 #endif
 
-//#define DISPLAY_CFG0 0x00000008 // connector on the right of the screen
-#define DISPLAY_CFG0 0x000000C8 // connector on the left of the screen
+#define DISPLAY_CFG0 0x00000008 // connector on the right of the screen
+//#define DISPLAY_CFG0 0x000000C8 // connector on the left of the screen
 #define DISPLAY_CFG1 0x000010ff
 
 #define DISPLAY_WIDTH 320

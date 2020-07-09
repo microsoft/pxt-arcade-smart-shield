@@ -112,6 +112,12 @@ void app_queue_annouce();
 void app_handle_packet(jd_packet_t *pkt);
 void app_process();
 
+void jd_reset_frame(jd_frame_t *frame);
+int jd_shift_frame(jd_frame_t *frame);
+void *jd_push_in_frame(jd_frame_t *frame, unsigned service_num, unsigned service_cmd,
+                       unsigned service_size);
+
+
 #ifdef __cplusplus
 }
 #endif

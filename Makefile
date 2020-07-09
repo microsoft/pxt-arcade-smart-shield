@@ -25,7 +25,6 @@ endif
 
 C_SRC += $(wildcard src/*.c) 
 C_SRC += $(HALSRC)
-C_SRC += $(JD_HEADER_PATH)/jdutil.c
 
 AS_SRC = targets/$(TARGET)/startup.s
 LD_SCRIPT = targets/$(TARGET)/linker.ld
