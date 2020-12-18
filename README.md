@@ -4,10 +4,13 @@ Firmware for shields with screen/buttons that enable MakeCode Arcade.
 The shield drives the screen (in particular it can bit-bang a 320x240 parallel
 connection screen).
 
-This firmware is just an example. Shield manufactures can use it a base for their own development.
+This firmware is just an example.
+Shield manufactures can use it as a base for their own development.
 
-More information on Arcade shield can be found at: 
-https://github.com/microsoft/pxt-arcade-hardware-designs/tree/master/microbit-shield#smart-shield
+More information on Arcade shield can be found at
+in [the Arcade shield spec](https://github.com/microsoft/pxt-arcade-hardware-designs/tree/master/microbit-shield#smart-shield)
+and in particular in the [PDF schematic](https://github.com/microsoft/pxt-arcade-hardware-designs/blob/master/microbit-shield/smart-shield-v0.0.0.pdf).
+
 
 ## Building
 
@@ -28,7 +31,7 @@ You have three options:
   you can also re-program other debuggers with BMP firmware
 * a CMSIS-DAP debugger; we've been using 
   [Particle Debugger](https://store.particle.io/products/particle-debugger);
-  make sure to disconnect micro:bit from your computer when using this
+  make sure to disconnect micro:bit USB port from your computer when using this
 * an ST-LINK/V2 or one of its clones - this is the default setting
 You will want to set the right interface in `Makefile.user`.
 
@@ -36,7 +39,8 @@ You will want to set the right interface in `Makefile.user`.
 
 Head to `main.c`, uncomment call to `show_test_screen()`.
 Now deploy your program by running `make run` (or `make r` for short).
-You'll likely need to have micro:bit connected to close the power circuit.
+You'll likely need to have micro:bit connected to the shield
+to close the power circuit.
 You should see vertical stripes on the screen.
 
 ![Vertical stripes showing on the shield screen](images/stripes.jpg)
