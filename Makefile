@@ -2,6 +2,8 @@ PREFIX = arm-none-eabi-
 CC = $(PREFIX)gcc
 AS = $(PREFIX)as
 
+_IGNORE1 := $(shell test -f STM32CubeF0/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_ll_tim.h || git submodule update --init --recursive 1>&2)
+
 TARGET = f030
 
 CUBE = STM32Cube$(SERIES)
