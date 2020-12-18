@@ -5,7 +5,7 @@ CFLAGS += -mcpu=cortex-m0
 #OPENOCD ?= openocd -f interface/cmsis-dap.cfg -f target/stm32f0x.cfg
 OPENOCD ?= openocd -f interface/stlink-v2.cfg -f target/stm32f0x.cfg
 
-HALPREF = $(DRV)/STM32F0xx_HAL_Driver/Src
+HALPREF = $(DRV)/Src
 HALSRC =  \
 $(HALPREF)/stm32f0xx_ll_adc.c \
 $(HALPREF)/stm32f0xx_ll_comp.c \

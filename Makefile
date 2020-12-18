@@ -3,12 +3,11 @@ CC = $(PREFIX)gcc
 AS = $(PREFIX)as
 
 _IGNORE0 := $(shell test -f Makefile.user || cp sample-Makefile.user Makefile.user)
-_IGNORE1 := $(shell test -f STM32CubeF0/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_ll_tim.h || git submodule update --init --recursive 1>&2)
+_IGNORE1 := $(shell test -f cmsis_core/README.md || git submodule update --init --recursive 1>&2)
 
 include Makefile.user
 
-CUBE = STM32Cube$(SERIES)
-DRV = $(CUBE)/Drivers
+DRV = stm32f0xx_hal_driver
 DEFINES = -DUSE_FULL_ASSERT -DUSE_FULL_LL_DRIVER
 WARNFLAGS = -Wall -Werror
 CFLAGS = $(DEFINES) \
@@ -36,10 +35,10 @@ V = @
 OBJ = $(addprefix $(BUILT)/,$(C_SRC:.c=.o) $(AS_SRC:.s=.o))
 
 CPPFLAGS = \
-	-I$(DRV)/STM32$(SERIES)xx_HAL_Driver/Inc \
-	-I$(DRV)/STM32$(SERIES)xx_HAL_Driver/Inc/Legacy \
-	-I$(DRV)/CMSIS/Device/ST/STM32$(SERIES)xx/Include \
-	-I$(DRV)/CMSIS/Include \
+	-I$(DRV)/Inc \
+	-I$(DRV)/Inc/Legacy \
+	-Icmsis_device_f0/Include \
+	-Icmsis_core/Include \
 	-Itargets/$(TARGET) \
 	-Isrc \
 	-I$(JD_DISPLAY_HEADER_PATH) \
