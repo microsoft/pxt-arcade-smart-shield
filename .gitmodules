@@ -4,3 +4,12 @@
 [submodule "STM32CubeG0"]
 	path = STM32CubeG0
 	url = https://github.com/mmoskal/STM32CubeG0
+[submodule "cmsis_device_f0"]
+	path = cmsis_device_f0
+	url = https://github.com/STMicroelectronics/cmsis_device_f0
+[submodule "cmsis_core"]
+	path = cmsis_core
+	url = https://github.com/STMicroelectronics/cmsis_core
+[submodule "stm32f0xx_hal_driver"]
+	path = stm32f0xx_hal_driver
+	url = https://github.com/STMicroelectronics/stm32f0xx_hal_driver
