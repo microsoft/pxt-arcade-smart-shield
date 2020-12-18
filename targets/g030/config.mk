@@ -2,8 +2,8 @@ SERIES = G0
 DEFINES += -DSTM32G030xx
 CFLAGS += -mcpu=cortex-m0plus
 
-OPENOCD = ./scripts/openocd -s ./scripts -f cmsis-dap.cfg -f stm32g0x.cfg
-#BMP = 1
+OPENOCD ?= ./scripts/openocd -s ./scripts -f cmsis-dap.cfg -f stm32g0x.cfg
+#BMP ?= 1
 
 HALPREF = $(DRV)/STM32G0xx_HAL_Driver/Src
 HALSRC =  \

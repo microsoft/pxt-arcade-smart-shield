@@ -2,7 +2,7 @@ SERIES = G0
 DEFINES += -DSTM32G031xx -DBB_V0 -DPSCREEN
 CFLAGS += -mcpu=cortex-m0plus
 
-OPENOCD = ./scripts/openocd -s ./scripts -f stlink-v2-1.cfg -f stm32g0x.cfg
+OPENOCD ?= ./scripts/openocd -s ./scripts -f stlink-v2-1.cfg -f stm32g0x.cfg
 
 HALPREF = $(DRV)/STM32G0xx_HAL_Driver/Src
 HALSRC =  \

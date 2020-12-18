@@ -6,10 +6,34 @@ connection screen).
 
 This firmware is just an example. Shield manufactures can use it a base for their own development.
 
-## Build instructions
+## Building
 
-Make sure you have arm-none-eabi-gcc installed.
-Run `make`.
+You will need a Unix-like environment to build the firmware.
+On Windows, you can use Windows Subsystem for Linux or mingw32.
+
+* install `arm-none-eabi-gcc` (we've been using `9-2019-q4-major`)
+* install `openocd` (optional when using Black Magic Probe)
+* install GNU Make
+* run `make`; you should get a successful build
+
+Upon first run of `make`, a `Makefile.user` file will be created.
+You will want to adjust the settings in there - there are comments in there that should guide you through the process.
+
+To deploy the firmware to a module you will need a debugger interface.
+You have three options:
+* [Black Magic Probe](https://github.com/blacksphere/blackmagic/wiki); you can also re-program other debuggers with BMP firmware
+* a CMSIS-DAP debugger; we've been using [Particle Debugger](https://store.particle.io/products/particle-debugger)
+* an ST-LINK/V2 or one of its clones
+You will want to set the right interface in `Makefile.user`.
+
+Use `make run` (or its alias `make r`) to deploy firmware.
+
+### Notable make targets
+
+Other than the building/deployment targets, the following might be of note:
+
+* `make gdb` - run GDB debugger
+* `make clean` - clean (duh!)
 
 ## Contributing
 

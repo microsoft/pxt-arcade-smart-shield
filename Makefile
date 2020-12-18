@@ -2,9 +2,10 @@ PREFIX = arm-none-eabi-
 CC = $(PREFIX)gcc
 AS = $(PREFIX)as
 
+_IGNORE0 := $(shell test -f Makefile.user || cp sample-Makefile.user Makefile.user)
 _IGNORE1 := $(shell test -f STM32CubeF0/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_ll_tim.h || git submodule update --init --recursive 1>&2)
 
-TARGET = f030
+include Makefile.user
 
 CUBE = STM32Cube$(SERIES)
 DRV = $(CUBE)/Drivers
@@ -47,8 +48,10 @@ CPPFLAGS = \
 LDFLAGS = -specs=nosys.specs -specs=nano.specs \
 	-T"$(LD_SCRIPT)" -Wl,-Map=$(BUILT)/output.map -Wl,--gc-sections
 
+MAKE_FLAGS ?= -j8
+
 all:
-	$(MAKE) -j8 $(BUILT)/binary.hex
+	$(MAKE) $(MAKE_FLAGS) $(BUILT)/binary.hex
 
 drop:
 	$(MAKE) TARGET=g031 all
