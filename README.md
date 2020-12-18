@@ -8,8 +8,8 @@ This firmware is just an example. Shield manufactures can use it a base for thei
 
 ## Build instructions
 
-Checkout pxt-common-packages at `smart_screen` branch. Symlink it in the main folder here.
-To be added as sub-module as soon as it stabilizes.
+Make sure you have arm-none-eabi-gcc installed.
+Run `make`.
 
 ## Contributing
 

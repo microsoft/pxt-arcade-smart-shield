@@ -15,7 +15,7 @@ CFLAGS = $(DEFINES) \
 	-Os -g3 -Wall -ffunction-sections -fdata-sections \
 	$(WARNFLAGS)
 BUILT = built/$(TARGET)
-JD_DISPLAY_HEADER_PATH = jdsrc
+JD_DISPLAY_HEADER_PATH = pxt-display
 HEADERS = $(wildcard src/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h)
 
 include targets/$(TARGET)/config.mk
