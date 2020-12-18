@@ -34,6 +34,9 @@ Head to `main.c`, uncomment call to `show_test_screen()`.
 Now deploy your program by running `make run` (or `make r` for short).
 You'll likely need to have micro:bit connected to close the power circuit.
 You should see vertical stripes on the screen.
+
+![Vertical stripes showing on the shield screen](images/stripes.jpg)
+
 If you don't:
 * make sure the screen is hardware-configured as 8-bit parallel (and not 16-bit or SPI)
 * make sure the screen is using pins `D[17:10]` for communication (`IM3-0` are `1001`);
@@ -42,6 +45,8 @@ If you don't:
 
 Once you have the screen running, comment out `show_test_screen()` and deploy again.
 You now should be able to run Arcade games on the micro:bit.
+
+![Space destroyer game showing on the shield screen](images/space-destroyer.jpg)
 
 ### Notable make targets
 
