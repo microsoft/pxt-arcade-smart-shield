@@ -6,13 +6,10 @@ TARGET ?= f030
 # defaults to -j8
 #MAKE_FLAGS = -j16
 
-# uncomment if using ST-LINK/V2
-#OPENOCD ?= openocd -f interface/cmsis-dap.cfg -f target/stm32f0x.cfg # default
-#OPENOCD ?= openocd -f interface/stlink-v2.cfg -f target/stm32f0x.cfg
-#OPENOCD ?= openocd -f interface/stlink-v2-1.cfg -f target/stm32f0x.cfg
-
-# set to empty (uncomment) to disable Black Magic Probe (and enable openocd)
-#BMP = 
+# Debugger selection:
+#OPENOCD ?= openocd -f interface/stlink-v2.cfg -f target/stm32f0x.cfg # STLINK - default
+#OPENOCD ?= openocd -f interface/cmsis-dap.cfg -f target/stm32f0x.cfg # CMSIS-DAP
+#BMP ?= 1  # Black Magic Probe
 
 # set to say COM3 if that's where your BMP is connected; on macOS the value is auto-detected
 #BMP_PORT = COM3

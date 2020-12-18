@@ -24,8 +24,9 @@ You have three options:
 * [Black Magic Probe](https://github.com/blacksphere/blackmagic/wiki);
   you can also re-program other debuggers with BMP firmware
 * a CMSIS-DAP debugger; we've been using 
-  [Particle Debugger](https://store.particle.io/products/particle-debugger)
-* an ST-LINK/V2 or one of its clones
+  [Particle Debugger](https://store.particle.io/products/particle-debugger);
+  make sure to disconnect micro:bit from your computer when using this
+* an ST-LINK/V2 or one of its clones - this is the default setting
 You will want to set the right interface in `Makefile.user`.
 
 ## First deployment
