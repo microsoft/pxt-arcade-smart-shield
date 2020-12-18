@@ -20,7 +20,6 @@
 #define PIN_LOG0 PA_10
 #endif
 
-
 void led_init() {
     pin_setup_output(PIN_LOG0);
     pin_setup_output(PIN_LOG1);
@@ -62,6 +61,12 @@ static void tick() {
 
 void screen_stripes(void);
 
+void show_test_screen(void) {
+  screen_set_backlight(255);
+    screen_stripes();
+    while(1);
+}
+
 int main(void) {
     jdspi_early_init();
     led_init();
@@ -74,11 +79,7 @@ int main(void) {
 
     jdspi_init();
 
-#if 0
-    screen_set_backlight(255);
-    screen_stripes();
-    while(1);
-#endif
+    // show_test_screen();
 
     uint64_t lastBlink = tim_get_micros();
     while (1) {

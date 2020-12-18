@@ -26,7 +26,19 @@ You have three options:
 * an ST-LINK/V2 or one of its clones
 You will want to set the right interface in `Makefile.user`.
 
-Use `make run` (or its alias `make r`) to deploy firmware.
+## First deployment
+
+Head to `main.c`, uncomment call to `show_test_screen()`.
+Now deploy your program by running `make run` (or `make r` for short).
+You'll likely need to have micro:bit connected to close the power circuit.
+You should see vertical stripes on the screen.
+If you don't:
+* make sure the screen is hardware-configured as 8-bit parallel (and not 16-bit or SPI)
+* make sure the screen is using pins `D[17:10]` for communication (`IM0-3` are `1001`); see Section 4. of ILI9341 datasheet
+* make sure it's an ILI9341 screen; if not you may need to edit `ili9341.c` file
+
+Once you have the screen running, comment out `show_test_screen()` and deploy again.
+You now should be able to run Arcade games on the micro:bit.
 
 ### Notable make targets
 
