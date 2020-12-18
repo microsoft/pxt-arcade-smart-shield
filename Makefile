@@ -13,9 +13,8 @@ CFLAGS = $(DEFINES) \
 	-Os -g3 -Wall -ffunction-sections -fdata-sections \
 	$(WARNFLAGS)
 BUILT = built/$(TARGET)
-JD_DISPLAY_HEADER_PATH = pxt-common-packages/libs/screen---st7735
-JD_HEADER_PATH = pxt-common-packages/libs/jacdac
-HEADERS = $(wildcard src/*.h) $(wildcard $(JD_HEADER_PATH)/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h)
+JD_DISPLAY_HEADER_PATH = jdsrc
+HEADERS = $(wildcard src/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h)
 
 include targets/$(TARGET)/config.mk
 
@@ -40,7 +39,6 @@ CPPFLAGS = \
 	-I$(DRV)/CMSIS/Include \
 	-Itargets/$(TARGET) \
 	-Isrc \
-	-I$(JD_HEADER_PATH) \
 	-I$(JD_DISPLAY_HEADER_PATH) \
 	-I$(BUILT)
 
