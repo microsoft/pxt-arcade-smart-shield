@@ -21,8 +21,10 @@ You will want to adjust the settings in there - there are comments in there that
 
 To deploy the firmware to a module you will need a debugger interface.
 You have three options:
-* [Black Magic Probe](https://github.com/blacksphere/blackmagic/wiki); you can also re-program other debuggers with BMP firmware
-* a CMSIS-DAP debugger; we've been using [Particle Debugger](https://store.particle.io/products/particle-debugger)
+* [Black Magic Probe](https://github.com/blacksphere/blackmagic/wiki);
+  you can also re-program other debuggers with BMP firmware
+* a CMSIS-DAP debugger; we've been using 
+  [Particle Debugger](https://store.particle.io/products/particle-debugger)
 * an ST-LINK/V2 or one of its clones
 You will want to set the right interface in `Makefile.user`.
 
@@ -34,7 +36,8 @@ You'll likely need to have micro:bit connected to close the power circuit.
 You should see vertical stripes on the screen.
 If you don't:
 * make sure the screen is hardware-configured as 8-bit parallel (and not 16-bit or SPI)
-* make sure the screen is using pins `D[17:10]` for communication (`IM0-3` are `1001`); see Section 4. of ILI9341 datasheet
+* make sure the screen is using pins `D[17:10]` for communication (`IM3-0` are `1001`);
+  see Section 4. of ILI9341 datasheet
 * make sure it's an ILI9341 screen; if not you may need to edit `ili9341.c` file
 
 Once you have the screen running, comment out `show_test_screen()` and deploy again.
