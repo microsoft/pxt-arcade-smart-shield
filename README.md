@@ -6,6 +6,9 @@ connection screen).
 
 This firmware is just an example. Shield manufactures can use it a base for their own development.
 
+More information on Arcade shield can be found at: 
+https://github.com/microsoft/pxt-arcade-hardware-designs/tree/master/microbit-shield#smart-shield
+
 ## Building
 
 You will need a Unix-like environment to build the firmware.
