@@ -1,5 +1,5 @@
 SERIES = F0
-DEFINES += -DSTM32F030x8 -DPROTO_V2 -DPSCREEN
+DEFINES += -DSTM32F030x6 -DPROTO_V2 -DPSCREEN
 CFLAGS += -mcpu=cortex-m0
 
 #OPENOCD ?= openocd -f interface/cmsis-dap.cfg -f target/stm32f0x.cfg

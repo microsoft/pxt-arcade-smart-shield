@@ -72,7 +72,7 @@ int main(void) {
     led_init();
 
     tim_init();
-    dspi_init();
+    // dspi_init();
     adc_init_random();
 
     tick();

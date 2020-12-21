@@ -1,5 +1,7 @@
 #include "jdsimple.h"
 
+#ifdef SPI2
+
 #define SPI_IDX 2
 
 #if SPI_IDX == 1
@@ -155,3 +157,5 @@ void DMA_Handler(void) {
         f();
     }
 }
+
+#endif // SPI2
