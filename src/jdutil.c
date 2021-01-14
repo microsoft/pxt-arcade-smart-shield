@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #include "jdsimple.h"
 
 #define ALIGN(x) (((x) + 3) & ~3)

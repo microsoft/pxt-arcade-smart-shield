@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #include "jdsimple.h"
 
 static int8_t irq_disabled;

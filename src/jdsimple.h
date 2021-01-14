@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #ifndef __JDSIMPLE_H
 #define __JDSIMPLE_H
 

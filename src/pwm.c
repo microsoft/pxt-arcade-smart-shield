@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #include "jdsimple.h"
 
 #define CLK_EN __HAL_RCC_TIM3_CLK_ENABLE

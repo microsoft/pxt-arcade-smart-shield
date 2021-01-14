@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #ifndef __STM32_ASSERT_H
 #define __STM32_ASSERT_H
 

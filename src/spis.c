@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 #include "jdsimple.h"
 
 #define DMA_FLAG_GLOBAL DMA_ISR_GIF1_Pos
