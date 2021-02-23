@@ -3,7 +3,7 @@ CC = $(PREFIX)gcc
 AS = $(PREFIX)as
 
 _IGNORE0 := $(shell test -f Makefile.user || cp sample-Makefile.user Makefile.user)
-_IGNORE1 := $(shell test -f cmsis_core/README.md || git submodule update --init --recursive 1>&2)
+_IGNORE1 := $(shell test -f jacdac-c/jacdac/README.md || git submodule update --init --recursive 1>&2)
 
 include Makefile.user
 
@@ -15,8 +15,9 @@ CFLAGS = $(DEFINES) \
 	-Os -g3 -Wall -ffunction-sections -fdata-sections \
 	$(WARNFLAGS)
 BUILT = built/$(TARGET)
-JD_DISPLAY_HEADER_PATH = pxt-display
-HEADERS = $(wildcard src/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h)
+JD_DISPLAY_HEADER_PATH = jacdac-c/jacdac/dist/c
+JD_PROTO_HEADER_PATH = jacdac-c/inc
+HEADERS = $(wildcard src/*.h) $(wildcard $(JD_DISPLAY_HEADER_PATH)/*.h) $(wildcard $(JD_PROTO_HEADER_PATH)/*.h)
 
 include targets/$(TARGET)/config.mk
 
@@ -42,6 +43,8 @@ CPPFLAGS = \
 	-Itargets/$(TARGET) \
 	-Isrc \
 	-I$(JD_DISPLAY_HEADER_PATH) \
+	-I$(JD_PROTO_HEADER_PATH) \
+	-Ijacdac-c \
 	-I$(BUILT)
 
 LDFLAGS = -specs=nosys.specs -specs=nano.specs \

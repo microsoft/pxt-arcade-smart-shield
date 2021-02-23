@@ -7,3 +7,6 @@
 [submodule "stm32f0xx_hal_driver"]
 	path = stm32f0xx_hal_driver
 	url = https://github.com/STMicroelectronics/stm32f0xx_hal_driver
+[submodule "jacdac-c"]
+	path = jacdac-c
+	url = https://github.com/microsoft/jacdac-c

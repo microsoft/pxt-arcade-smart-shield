@@ -30,27 +30,24 @@ static const uint8_t buttonPins[] = {
 #endif
 };
 
-#define BUTTON_FLAGS 0
-#define NUM_PLAYERS 1
-
 static uint16_t buttonAd[] = { //
-    BUTTON_FLAGS | (NUM_PLAYERS << 8), JD_ARCADE_CONTROLS_BUTTON_LEFT, JD_ARCADE_CONTROLS_BUTTON_UP,
-    JD_ARCADE_CONTROLS_BUTTON_RIGHT,   JD_ARCADE_CONTROLS_BUTTON_DOWN, JD_ARCADE_CONTROLS_BUTTON_A,
-    JD_ARCADE_CONTROLS_BUTTON_B,       JD_ARCADE_CONTROLS_BUTTON_MENU};
+    JD_ARCADE_GAMEPAD_BUTTON_LEFT, JD_ARCADE_GAMEPAD_BUTTON_UP, JD_ARCADE_GAMEPAD_BUTTON_RIGHT,
+    JD_ARCADE_GAMEPAD_BUTTON_DOWN, JD_ARCADE_GAMEPAD_BUTTON_A,  JD_ARCADE_GAMEPAD_BUTTON_B,
+    JD_ARCADE_GAMEPAD_BUTTON_MENU};
 
 #define NUM_PINS sizeof(buttonPins)
 
 static bool sendReport, advertise, inited;
 
-void jd_arcade_controls_incoming(jd_packet_t *pkt) {
-    if (pkt->service_command == JD_CMD_ADVERTISEMENT_DATA)
+void jd_arcade_gamepad_incoming(jd_packet_t *pkt) {
+    if (pkt->service_command == JD_GET(JD_ARCADE_GAMEPAD_REG_BUTTONS))
         advertise = true;
     else
         // not expecting anything, but make sure we respond with something
         sendReport = true;
 }
 
-void jd_arcade_controls_process() {
+void jd_arcade_gamepad_process() {
     if (!inited) {
         inited = true;
         for (int i = 0; i < NUM_PINS; ++i) {
@@ -61,26 +58,30 @@ void jd_arcade_controls_process() {
         sendReport = true;
 }
 
-void jd_arcade_controls_outgoing(int serviceNo) {
-    jdspi_send_ad_data(serviceNo, &advertise, buttonAd, sizeof(buttonAd));
+void jd_arcade_gamepad_outgoing(int serviceNo) {
+    if (advertise) {
+        advertise = false;
+        jdspi_send(serviceNo, JD_GET(JD_ARCADE_GAMEPAD_REG_BUTTONS), buttonAd, sizeof(buttonAd));
+    }
 
     if (!sendReport)
         return;
 
-    jd_arcade_controls_report_entry_t reports[NUM_PINS], *report;
+    jd_arcade_gamepad_buttons_t reports[NUM_PINS], *report;
     report = reports;
+
+    // TODO send events?
 
     for (int i = 0; i < NUM_PINS; ++i) {
         if (pin_get(buttonPins[i]) == 0) {
             report->button = i;
-            report->player_index = 0;
             report->pressure = 0xff;
             // DMESG("btn %d", i);
             report++;
         }
     }
 
-    if (jdspi_send(serviceNo, JD_CMD_GET_REG | JD_REG_READING, reports,
+    if (jdspi_send(serviceNo, JD_GET(JD_REG_READING), reports,
                    (uint8_t *)report - (uint8_t *)reports))
         sendReport = false;
 }
