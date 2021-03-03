@@ -4,8 +4,7 @@
 #ifndef __JDSPI_H
 #define __JDSPI_H
 
-#include "jdprotocol.h"
-#include "jdarcade.h"
+#include "jd_protocol.h"
 
 void jdspi_process();
 void jdspi_early_init();
@@ -20,8 +19,12 @@ void jd_display_incoming(jd_packet_t *pkt);
 void jd_display_process();
 void jd_display_outgoing(int serviceNo);
 
-void jd_arcade_controls_incoming(jd_packet_t *pkt);
-void jd_arcade_controls_process();
-void jd_arcade_controls_outgoing(int serviceNo);
+void jd_arcade_gamepad_incoming(jd_packet_t *pkt);
+void jd_arcade_gamepad_process();
+void jd_arcade_gamepad_outgoing(int serviceNo);
+
+void jd_arcade_sound_incoming(jd_packet_t *pkt);
+void jd_arcade_sound_process();
+void jd_arcade_sound_outgoing(int serviceNo);
 
 #endif

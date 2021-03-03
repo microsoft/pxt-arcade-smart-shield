@@ -14,8 +14,10 @@
 
 #include "dmesg.h"
 #include "pinnames.h"
-#include "jdprotocol.h"
-#include "jdarcade.h"
+#include "jd_protocol.h"
+#include "arcadegamepad.h"
+#include "indexedscreen.h"
+#include "arcadesound.h"
 
 #ifdef __cplusplus
 extern "C" {

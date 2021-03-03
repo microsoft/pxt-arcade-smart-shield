@@ -4,6 +4,8 @@
 #include "jdsimple.h"
 #include "jdspi.h"
 
+// #define SOUND_TEST 1
+
 // timeout before we go to sleep if no host found
 #define INITIAL_TIMEOUT_MS 5000
 
@@ -111,14 +113,17 @@ void *jdspi_send(unsigned service_num, unsigned service_cmd, const void *data, u
 }
 
 void jdspi_send_ad_data(unsigned service_num, bool *flag, const void *data, unsigned size) {
-    if (*flag && jdspi_send(service_num, JD_CMD_ADVERTISEMENT_DATA, data, size))
+    if (*flag && jdspi_send(service_num, JD_CMD_ANNOUNCE, data, size))
         *flag = false;
 }
 
 static const uint32_t adData[] = {
-    JD_SERVICE_CLASS_CTRL,            // 0
-    JD_SERVICE_CLASS_DISPLAY,         // 1
-    JD_SERVICE_CLASS_ARCADE_CONTROLS, // 2
+    0x00000000,                      // 0 TODO?
+    JD_SERVICE_CLASS_INDEXED_SCREEN, // 1
+    JD_SERVICE_CLASS_ARCADE_GAMEPAD, // 2
+#ifdef SOUND_TEST
+    JD_SERVICE_CLASS_ARCADE_SOUND, // 3
+#endif
 };
 
 static bool advertise;
@@ -126,15 +131,20 @@ static bool advertise;
 static void process_one(jd_packet_t *pkt) {
     switch (pkt->service_number) {
     case 0:
-        if (pkt->service_command == JD_CMD_ADVERTISEMENT_DATA)
+        if (pkt->service_command == JD_CMD_ANNOUNCE)
             advertise = true;
         break;
     case 1:
         jd_display_incoming(pkt);
         break;
     case 2:
-        jd_arcade_controls_incoming(pkt);
+        jd_arcade_gamepad_incoming(pkt);
         break;
+#ifdef SOUND_TEST
+    case 3:
+        jd_arcade_sound_incoming(pkt);
+        break;
+#endif
     }
 
     if (jd_display_frame_start)
@@ -143,7 +153,10 @@ static void process_one(jd_packet_t *pkt) {
     if (sendState == SEND_FILLING) {
         jdspi_send_ad_data(0, &advertise, adData, sizeof(adData));
         jd_display_outgoing(1);
-        jd_arcade_controls_outgoing(2);
+        jd_arcade_gamepad_outgoing(2);
+#ifdef SOUND_TEST
+        jd_arcade_sound_outgoing(3);
+#endif
         if (send0.size)
             sendState = SEND_READY;
     }
@@ -176,7 +189,10 @@ void jdspi_process() {
     }
 
     jd_display_process();
-    jd_arcade_controls_process();
+    jd_arcade_gamepad_process();
+#ifdef SOUND_TEST
+    jd_arcade_sound_process();
+#endif
 
     uint64_t now = tim_get_micros();
 
