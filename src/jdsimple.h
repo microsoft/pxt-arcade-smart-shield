@@ -16,7 +16,7 @@
 #include "pinnames.h"
 #include "jd_protocol.h"
 #include "arcadegamepad.h"
-#include "arcadescreen.h"
+#include "indexedscreen.h"
 #include "arcadesound.h"
 
 #ifdef __cplusplus

@@ -117,7 +117,7 @@ void jdspi_send_ad_data(unsigned service_num, bool *flag, const void *data, unsi
 
 static const uint32_t adData[] = {
     0x00000000,                      // 0 TODO?
-    JD_SERVICE_CLASS_ARCADE_SCREEN,  // 1
+    JD_SERVICE_CLASS_INDEXED_SCREEN, // 1
     JD_SERVICE_CLASS_ARCADE_GAMEPAD, // 2
 #ifdef SOUND_TEST
     JD_SERVICE_CLASS_ARCADE_SOUND, // 3
