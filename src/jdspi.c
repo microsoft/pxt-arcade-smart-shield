@@ -119,6 +119,9 @@ static const uint32_t adData[] = {
     0x00000000,                      // 0 TODO?
     JD_SERVICE_CLASS_ARCADE_SCREEN,  // 1
     JD_SERVICE_CLASS_ARCADE_GAMEPAD, // 2
+#ifdef SOUND_TEST
+    JD_SERVICE_CLASS_ARCADE_SOUND, // 3
+#endif
 };
 
 static bool advertise;
@@ -135,6 +138,11 @@ static void process_one(jd_packet_t *pkt) {
     case 2:
         jd_arcade_gamepad_incoming(pkt);
         break;
+#ifdef SOUND_TEST
+    case 3:
+        jd_arcade_sound_incoming(pkt);
+        break;
+#endif
     }
 
     if (jd_display_frame_start)
@@ -144,6 +152,9 @@ static void process_one(jd_packet_t *pkt) {
         jdspi_send_ad_data(0, &advertise, adData, sizeof(adData));
         jd_display_outgoing(1);
         jd_arcade_gamepad_outgoing(2);
+#ifdef SOUND_TEST
+        jd_arcade_sound_outgoing(3);
+#endif
         if (send0.size)
             sendState = SEND_READY;
     }
@@ -177,6 +188,9 @@ void jdspi_process() {
 
     jd_display_process();
     jd_arcade_gamepad_process();
+#ifdef SOUND_TEST
+    jd_arcade_sound_process();
+#endif
 
     uint64_t now = tim_get_micros();
 

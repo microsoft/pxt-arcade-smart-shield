@@ -17,6 +17,7 @@
 #include "jd_protocol.h"
 #include "arcadegamepad.h"
 #include "arcadescreen.h"
+#include "arcadesound.h"
 
 #ifdef __cplusplus
 extern "C" {

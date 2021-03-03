@@ -10,7 +10,7 @@ include Makefile.user
 DRV = stm32f0xx_hal_driver
 DEFINES = -DUSE_FULL_ASSERT -DUSE_FULL_LL_DRIVER
 WARNFLAGS = -Wall -Werror
-CFLAGS = $(DEFINES) \
+CFLAGS = $(DEFINES) $(USERDEFINES) \
 	-mthumb -mfloat-abi=soft  \
 	-Os -g3 -Wall -ffunction-sections -fdata-sections \
 	$(WARNFLAGS)

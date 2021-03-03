@@ -23,4 +23,8 @@ void jd_arcade_gamepad_incoming(jd_packet_t *pkt);
 void jd_arcade_gamepad_process();
 void jd_arcade_gamepad_outgoing(int serviceNo);
 
+void jd_arcade_sound_incoming(jd_packet_t *pkt);
+void jd_arcade_sound_process();
+void jd_arcade_sound_outgoing(int serviceNo);
+
 #endif
