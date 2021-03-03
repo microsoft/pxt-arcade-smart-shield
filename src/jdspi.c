@@ -4,6 +4,8 @@
 #include "jdsimple.h"
 #include "jdspi.h"
 
+// #define SOUND_TEST 1
+
 // timeout before we go to sleep if no host found
 #define INITIAL_TIMEOUT_MS 5000
 
