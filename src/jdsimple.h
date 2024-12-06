@@ -4,7 +4,7 @@
 #ifndef __JDSIMPLE_H
 #define __JDSIMPLE_H
 
-#define DEVICE_DMESG_BUFFER_SIZE 1024
+#define DEVICE_DMESG_BUFFER_SIZE 512
 
 #include <stdint.h>
 #include <string.h>
