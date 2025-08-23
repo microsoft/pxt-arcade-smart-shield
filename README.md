@@ -9,7 +9,7 @@ Shield manufactures can use it as a base for their own development.
 
 More information on Arcade shield can be found at
 in [the Arcade shield spec](https://github.com/microsoft/pxt-arcade-hardware-designs/tree/master/microbit-shield#smart-shield)
-and in particular in the [PDF schematic](https://github.com/microsoft/pxt-arcade-hardware-designs/blob/master/microbit-shield/smart-shield-v0.0.0.pdf).
+and in particular in the [PDF schematic](https://github.com/microsoft/pxt-arcade-hardware-designs/blob/master/microbit-shield/smart-shield-v0.0.1.pdf).
 
 
 ## Building
@@ -83,3 +83,4 @@ Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services
 may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries.
 The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks.
 Microsoft's general trademark guidelines can be found at http://go.microsoft.com/fwlink/?LinkID=254653.
+
