@@ -14,23 +14,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2
       with:
         submodules: 'recursive'
         fetch-depth: 0
-    - uses: actions/setup-node@v2-beta
+    - uses: actions/setup-node@27082cecf3ff7a1742dbd5e12605f0cb59dce2d9 # v2-beta
       with:
           node-version: 'v12'
 
     - name: Restore ARM GCC Cache
       id: arm-gcc-cache
-      uses: actions/cache@v2
+      uses: actions/cache@8492260343ad570701412c2f464a5877dc76bace # v2
       with:
         path: arm-gcc
         key:  ${{ runner.os }}-arm-gcc-${{ env.GCC_VERSION }}
     - name: Install ARM GCC
       if: steps.arm-gcc-cache.outputs.cache-hit != 'true'
-      uses: fiam/arm-none-eabi-gcc@v1
+      uses: fiam/arm-none-eabi-gcc@4cecd3f99905c1c296edf75f570b9e68993be22f # v1
       with:
         release: ${{ env.GCC_VERSION }}
         directory: arm-gcc
@@ -41,7 +41,7 @@ jobs:
       run: make
 
     - name: Upload action artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: f030.elf
         path: built/f030/binary.elf
